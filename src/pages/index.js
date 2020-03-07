@@ -1,0 +1,88 @@
+import React, { Fragment, useEffect, useState } from 'react'
+import get from 'lodash/get'
+import isEmpty from 'lodash/isEmpty'
+import { connect } from 'react-redux'
+import { fetchGames } from '../actions'
+import Table from '../components/table'
+import Modal from '../components/modal'
+import Searchbar from '../components/searchbar'
+import Form from '../components/form'
+import { lowerCaseFilter } from '../utils/lowerCaseFilter'
+
+const mapDispatchToProps = ({ fetchGames })
+const mapStateToProps = state => ({
+  data: state.data,
+  loading: state.loading,
+  error: state.error,
+})
+
+const text = {
+  tableHead: ['', 'title', 'console', 'score', 'year'],
+  loading: 'LOADING',
+  add: 'Add',
+  delete: 'Delete',
+  edit: 'Edit'
+}
+
+const MainPage = ({ fetchGames, loading, data }) => {
+  const [tableData, setTableData] = useState([])
+  const [searchValue, setSearchValue] = useState('')
+  const [modalIsOn, setModalIsOn] = useState(false)
+  const [checkData, setCheckData] = useState({})
+  const [type, setType] = useState('create')
+  const { checked } = checkData
+
+  const searchHandler = (value) => setSearchValue(value)
+  const checkedHandler = (value) => setCheckData(value)
+  const showModal = (value) => setModalIsOn(!value)
+  const modalClosed = (value) => setModalIsOn(value)
+
+  const selectForm = (type, isCheck) => {
+    if (isCheck && type === 'delete') return 'delete'
+    if (isCheck && type === 'edit') return 'edit'
+    if (!isCheck && type === 'create') return 'create'
+  }
+  const onClick = (isModalOn, type) => {
+    showModal(isModalOn)
+    setType(type)
+  }
+
+  const typeOfForm = selectForm(type, checkData.checked)
+
+  const button = (text, type) => (
+    <button onClick={() => onClick(modalIsOn, type)}>{text}</button>
+  )
+  
+  useEffect(() => {
+    if (isEmpty(data)) fetchGames()
+    const fetchedData = get(data, "data", [])
+    const filteredData = lowerCaseFilter(fetchedData, searchValue)
+    setTableData(filteredData)
+  }, [data, fetchGames, searchValue])
+
+  useEffect(() => {
+    if (checked === false) setType('create')
+  }, [checked, setType])
+
+  if (loading) return <div>{text.loading}</div>
+
+  return (
+    <Fragment>
+      <div>
+        <Searchbar searchHandler={searchHandler} />
+        {typeOfForm === 'create' && button(text.add, type)}
+        {checked && button(text.edit, 'edit')}
+        {checked && button(text.delete, 'delete')}
+      </div>
+      <Table headerText={text.tableHead} bodyData={tableData} checkedHandler={checkedHandler} />
+      <Modal showModal={modalIsOn} modalClosed={modalClosed}>
+        <Form typeOfForm={typeOfForm} id={checkData.id} data={data.data} />
+      </Modal>
+    </Fragment>
+  )
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(MainPage)
