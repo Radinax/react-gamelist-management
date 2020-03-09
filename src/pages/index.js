@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
 import { connect } from 'react-redux'
@@ -8,6 +8,7 @@ import Modal from '../components/modal'
 import Searchbar from '../components/searchbar'
 import Form from '../components/form'
 import { lowerCaseFilter } from '../utils/lowerCaseFilter'
+import { Container, Toolbar, Title } from './styled.js'
 
 const mapDispatchToProps = ({ fetchGames })
 const mapStateToProps = state => ({
@@ -21,7 +22,8 @@ const text = {
   loading: 'LOADING',
   add: 'Add',
   delete: 'Delete',
-  edit: 'Edit'
+  edit: 'Edit',
+  title: 'CREATE YOUR OWN LIST OF GAMES!'
 }
 
 const MainPage = ({ fetchGames, loading, data }) => {
@@ -67,18 +69,19 @@ const MainPage = ({ fetchGames, loading, data }) => {
   if (loading) return <div>{text.loading}</div>
 
   return (
-    <Fragment>
-      <div>
+    <Container>
+      <Title>{text.title}</Title>
+      <Toolbar>
         <Searchbar searchHandler={searchHandler} />
         {typeOfForm === 'create' && button(text.add, type)}
         {checked && button(text.edit, 'edit')}
         {checked && button(text.delete, 'delete')}
-      </div>
+      </Toolbar>
       <Table headerText={text.tableHead} bodyData={tableData} checkedHandler={checkedHandler} />
       <Modal showModal={modalIsOn} modalClosed={modalClosed}>
         <Form typeOfForm={typeOfForm} id={checkData.id} data={data.data} />
       </Modal>
-    </Fragment>
+    </Container>
   )
 }
 

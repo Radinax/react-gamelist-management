@@ -2,6 +2,19 @@ import React, { useState, useEffect } from 'react'
 import { bool, func } from 'prop-types'
 import ReactModal from 'react-modal'
 
+const customStyles = {
+  content : {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+    display: 'flex',
+    flexDirection: 'column'
+  }
+};
+
 const Modal = ({ showModal, modalClosed, children }) => {
   const [openModal, setOpenModal] = useState(false)
   
@@ -11,16 +24,18 @@ const Modal = ({ showModal, modalClosed, children }) => {
   
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => modalClosed(openModal), [openModal])
+
+  const closeButton = <button style={{ width: 'fit-content' }} onClick={() => closeModal()}>X</button>
   
   return (
     <ReactModal
       isOpen={openModal}
       shouldCloseOnEsc={true}
       ariaHideApp={false}
-      style={ {content: { display: 'flex', flexDirection: 'column' }}}
+      style={customStyles}
     >
+      {closeButton}
       {children}
-      <button style={{ width: 'fit-content' }} onClick={() => closeModal()}>CLOSE MODAL</button>
     </ReactModal>
   )
 }

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { func } from 'prop-types'
+import { SearchInput } from './styled'
 
 const Searchbar = ({ searchHandler }) => {
   const [searchField, setSearchField] = useState('')
@@ -8,7 +9,13 @@ const Searchbar = ({ searchHandler }) => {
 
   useEffect(() => searchHandler(searchField), [searchField, searchHandler])
 
-  return <input type='search' placeholder='Search...' onChange={onSearchChange} />
+  return (
+    <SearchInput
+      type='search'
+      placeholder='Search...'
+      onChange={onSearchChange} />
+  
+  )
 }
 
 Searchbar.propTypes = {
