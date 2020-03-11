@@ -7,6 +7,7 @@ import Table from '../components/table'
 import Modal from '../components/modal'
 import Searchbar from '../components/searchbar'
 import Form from '../components/form'
+import ReactTable from '../components/reactTable'
 import { lowerCaseFilter } from '../utils/lowerCaseFilter'
 
 const mapDispatchToProps = ({ fetchGames })
@@ -23,6 +24,25 @@ const text = {
   delete: 'Delete',
   edit: 'Edit'
 }
+
+const column = [
+  {
+    Header: 'Title',
+    accessor: 'title'
+  },
+  {
+    Header: 'Console',
+    accessor: 'console'
+  },
+  {
+    Header: 'Score',
+    accessor: 'score'
+  },
+  {
+    Header: 'Year',
+    accessor: 'year'
+  }
+]
 
 const MainPage = ({ fetchGames, loading, data }) => {
   const [tableData, setTableData] = useState([])
@@ -75,6 +95,7 @@ const MainPage = ({ fetchGames, loading, data }) => {
         {checked && button(text.delete, 'delete')}
       </div>
       <Table headerText={text.tableHead} bodyData={tableData} checkedHandler={checkedHandler} />
+      <ReactTable checkedHandler={checkedHandler} tableData={tableData} tableColumn={column} />
       <Modal showModal={modalIsOn} modalClosed={modalClosed}>
         <Form typeOfForm={typeOfForm} id={checkData.id} data={data.data} />
       </Modal>
