@@ -1,7 +1,6 @@
 import React from 'react'
 
 const Input = ({ name, value, label, onChange }) => {
-  console.log('value', value)
   return (
     <label>
       {`${label}: `}      

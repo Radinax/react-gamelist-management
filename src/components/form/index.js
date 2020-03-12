@@ -19,6 +19,7 @@ const Form = ({ typeOfForm, addGame, deleteGame, editGame, id, data }) => {
   const [consoles, setConsoles] = useState('')
   const [score, setScore] = useState(0)
   const [year, setYear] = useState(0)
+  const [appId, setAppId] = useState(null)
 
   const handleChange = setter => event => setter(event.target.value)
   const handleSubmit = () => {
@@ -39,7 +40,7 @@ const Form = ({ typeOfForm, addGame, deleteGame, editGame, id, data }) => {
         console: consoles,
         score,
         year,
-        id
+        id: appId
       })
     }
   }
@@ -57,11 +58,12 @@ const Form = ({ typeOfForm, addGame, deleteGame, editGame, id, data }) => {
 
   useEffect(() => {
     if (typeOfForm === 'edit') {
-      const selectedGame = data.filter((o, i) => i === parseInt(id))[0]
+      const selectedGame = data.filter(o => o.appId === parseInt(id))[0]
       setGameName(selectedGame.title)
       setConsoles(selectedGame.console)
       setScore(selectedGame.score)
       setYear(selectedGame.year)
+      setAppId(selectedGame.id)
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

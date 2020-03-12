@@ -59,7 +59,6 @@ const Table = ({ columns, data, checkedHandler }) => {
       id: Number(v), checked: selectedRowIds[v]
     }))[0]
     const datee = isEmpty(selectedRowIds) ? initial : callbackValue
-    console.log(datee)
     checkedHandler(datee)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedRowIds])

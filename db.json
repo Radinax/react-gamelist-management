@@ -1,17 +1,17 @@
 {
   "games": [
     {
-      "id": 1,
       "title": "Dark Souls",
-      "console": "PC",
-      "score": 8.5,
-      "year": 2015
+      "console": "afaf",
+      "score": "012",
+      "year": "03131",
+      "id": 1
     },
     {
-      "title": "Final Fantasy X",
-      "console": "PS2",
-      "score": "10",
-      "year": "2000",
+      "title": "New Name",
+      "console": "afaf",
+      "score": "012",
+      "year": "03131",
       "id": 4
     },
     {

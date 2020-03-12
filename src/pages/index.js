@@ -86,6 +86,8 @@ const MainPage = ({ fetchGames, loading, data }) => {
 
   if (loading) return <div>{text.loading}</div>
 
+  const dataWithId = !isEmpty(data) && data.data.map((o, i) => ({ ...o, appId: i }))
+
   return (
     <Fragment>
       <div>
@@ -97,7 +99,7 @@ const MainPage = ({ fetchGames, loading, data }) => {
       {/*<Table headerText={text.tableHead} bodyData={tableData} checkedHandler={checkedHandler} />*/}
       <ReactTable checkedHandler={checkedHandler} tableData={tableData} tableColumn={column} />
       <Modal showModal={modalIsOn} modalClosed={modalClosed}>
-        <Form typeOfForm={typeOfForm} id={checkData.id} data={data.data} />
+        <Form typeOfForm={typeOfForm} id={checkData.id} data={dataWithId} />
       </Modal>
     </Fragment>
   )
