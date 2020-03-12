@@ -57,7 +57,7 @@ const Form = ({ typeOfForm, addGame, deleteGame, editGame, id, data }) => {
 
   useEffect(() => {
     if (typeOfForm === 'edit') {
-      const selectedGame = data.filter(o => o.id === parseInt(id))[0]
+      const selectedGame = data.filter((o, i) => i === parseInt(id))[0]
       setGameName(selectedGame.title)
       setConsoles(selectedGame.console)
       setScore(selectedGame.score)

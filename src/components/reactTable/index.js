@@ -1,4 +1,4 @@
-import React, { forwardRef, useRef, useEffect, useState } from 'react'
+import React, { forwardRef, useRef, useEffect } from 'react'
 import { useTable, useRowSelect } from 'react-table'
 import isEmpty from 'lodash/isEmpty'
 import { Styles } from './styles'
@@ -45,19 +45,7 @@ const Table = ({ columns, data, checkedHandler }) => {
           ),
           Cell: ({ row }) => (
             <div>
-              {
-                <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
-              }
-              {
-                  /*
-                  <input
-                    type='checkbox'
-                    onChange={e => setCheckedValue({ id: e.target.value, checked: row.isSelected })}
-                    value={row.isSelected ? row.original.id : 'null'}
-                    {...row.getToggleRowSelectedProps()}
-                  /> 
-                  */
-              }
+              <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
             </div>
           ),
         },
