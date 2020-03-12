@@ -32,7 +32,7 @@ const Form = ({ typeOfForm, addGame, deleteGame, editGame, id, data }) => {
       })
     } else if (typeOfForm === 'delete') {
       deleteGame({
-        id
+        id: appId
       })
     } else {
       editGame({
@@ -57,7 +57,7 @@ const Form = ({ typeOfForm, addGame, deleteGame, editGame, id, data }) => {
   const deleteForm = <Fragment>{text.warning}</Fragment>
 
   useEffect(() => {
-    if (typeOfForm === 'edit') {
+    if (typeOfForm === 'edit' || typeOfForm === 'delete') {
       const selectedGame = data.filter(o => o.appId === parseInt(id))[0]
       setGameName(selectedGame.title)
       setConsoles(selectedGame.console)
