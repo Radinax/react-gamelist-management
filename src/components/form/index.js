@@ -2,7 +2,7 @@ import React, { useState, Fragment, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { string, func } from 'prop-types'
 import { addGame, deleteGame, editGame } from '../../actions'
-import Input from './input'
+import { Label, Span } from './styled'
 
 const mapDispatchToProps = ({ addGame, deleteGame, editGame })
 
@@ -12,6 +12,15 @@ const text = {
   score: 'score',
   year: 'Year',
   warning: 'Are you sure you want to erase this game from the list?'
+}
+
+const Input = ({ name, value, label, onChange }) => {
+  return (
+    <Label>
+      <Span>{`${label}: `}</Span>      
+      <input type="text" name={name} value={value} onChange={onChange} required />
+    </Label>
+  )
 }
 
 const Form = ({ typeOfForm, addGame, deleteGame, editGame, id, data }) => {
