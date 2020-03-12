@@ -1,9 +1,9 @@
 import React, { forwardRef, useRef, useEffect } from 'react'
 import { useTable, useRowSelect } from 'react-table'
 import isEmpty from 'lodash/isEmpty'
-import { Styles } from './styles'
+import { TableContainer } from './styles'
 
-const IndeterminateCheckbox = forwardRef(
+const Checkbox = forwardRef(
   ({ indeterminate, ...rest }, ref) => {
     const defaultRef = useRef()
     const resolvedRef = ref || defaultRef
@@ -12,11 +12,7 @@ const IndeterminateCheckbox = forwardRef(
       resolvedRef.current.indeterminate = indeterminate
     }, [resolvedRef, indeterminate])
 
-    return (
-      <>
-        <input type="checkbox" ref={resolvedRef} {...rest} />
-      </>
-    )
+    return <input type="checkbox" ref={resolvedRef} {...rest} />
   }
 )
 
@@ -38,16 +34,8 @@ const Table = ({ columns, data, checkedHandler }) => {
       hooks.visibleColumns.push(columns => [
         {
           id: 'selection',
-          Header: ({ getToggleAllRowsSelectedProps }) => (
-            <div>
-              <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />
-            </div>
-          ),
-          Cell: ({ row }) => (
-            <div>
-              <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
-            </div>
-          ),
+          Header: ({ getToggleAllRowsSelectedProps }) => <Checkbox {...getToggleAllRowsSelectedProps()} />,
+          Cell: ({ row }) => <Checkbox {...row.getToggleRowSelectedProps()} />,
         },
         ...columns,
       ])
@@ -55,38 +43,42 @@ const Table = ({ columns, data, checkedHandler }) => {
   )
 
   useEffect(() => {
-    const callbackValue = Object.keys(selectedRowIds).map(v => ({
-      id: Number(v), checked: selectedRowIds[v]
-    }))[0]
-    const datee = isEmpty(selectedRowIds) ? initial : callbackValue
-    checkedHandler(datee)
+    const callbackValue = isEmpty(selectedRowIds)
+      ? initial 
+      : Object.keys(selectedRowIds).map(v => ({ id: Number(v), checked: selectedRowIds[v]}))[0]
+    checkedHandler(callbackValue)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedRowIds])
 
-  // Render the UI for your table
+  const tableHead = (
+    <thead>
+      {headerGroups.map(headerGroup => (
+        <tr {...headerGroup.getHeaderGroupProps()}>
+          {headerGroup.headers.map(column => <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+          )}
+        </tr>
+      ))}
+    </thead>
+  )
+
+  const tableBody = (
+    <tbody {...getTableBodyProps()}>
+      {rows.slice(0, 10).map(row => {
+        prepareRow(row)
+        return (
+          <tr {...row.getRowProps()}>
+            {row.cells.map(cell => <td {...cell.getCellProps()}>{cell.render('Cell')}</td>)}
+          </tr>
+        )
+      })}
+    </tbody>
+  )
+
   return (
-    <>
-      <table {...getTableProps()}>
-        <thead>
-          {headerGroups.map(headerGroup => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map(column => <th {...column.getHeaderProps()}>{column.render('Header')}</th>
-              )}
-            </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {rows.slice(0, 10).map(row => {
-            prepareRow(row)
-            return (
-              <tr {...row.getRowProps()}>
-                {row.cells.map(cell => <td {...cell.getCellProps()}>{cell.render('Cell')}</td>)}
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
-    </>
+    <table {...getTableProps()}>
+      {tableHead}
+      {tableBody}
+    </table>
   )
 }
 
@@ -95,9 +87,9 @@ const ReactTable = ({ tableData, tableColumn, checkedHandler }) => {
   const column = React.useMemo(() => tableColumn, [tableColumn])
 
   return (
-    <Styles>
+    <TableContainer>
       <Table checkedHandler={checkedHandler} columns={column} data={data} />
-    </Styles>
+    </TableContainer>
   )
 }
 
