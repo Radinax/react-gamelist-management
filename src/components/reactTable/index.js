@@ -1,35 +1,28 @@
 import React, { forwardRef, useRef, useEffect, useState } from 'react'
 import { useTable, useRowSelect } from 'react-table'
+import isEmpty from 'lodash/isEmpty'
 import { Styles } from './styles'
 
 const IndeterminateCheckbox = forwardRef(
-  ({ indeterminate, onChange, value, ...rest }, ref) => {
+  ({ indeterminate, ...rest }, ref) => {
     const defaultRef = useRef()
     const resolvedRef = ref || defaultRef
-    const defaultValue = value || []
 
     useEffect(() => {
       resolvedRef.current.indeterminate = indeterminate
     }, [resolvedRef, indeterminate])
 
-    console.log('value', value)
-
     return (
       <>
-        <input type="checkbox" value={value} onChange={onChange} ref={resolvedRef} {...rest} />
+        <input type="checkbox" ref={resolvedRef} {...rest} />
       </>
     )
   }
 )
 
 const Table = ({ columns, data, checkedHandler }) => {
-  const [checkedValue, setCheckedValue] = useState({ id: null, checked: false })
-  const onCheck = (event) => {
-    event.persist()
-    console.log('oncheck', event)
-    setCheckedValue({ id: event.target.value, checked: !checkedValue.checked })
-  }
-  useEffect(() => checkedHandler(checkedValue), [checkedValue, checkedHandler])
+  const initial = { id: null, checked: false }
+  
   // Use the state and functions returned from useTable to build your UI
   const {
     getTableProps,
@@ -37,30 +30,34 @@ const Table = ({ columns, data, checkedHandler }) => {
     headerGroups,
     rows,
     prepareRow,
+    state: { selectedRowIds },
   } = useTable(
-    { columns, data,},
+    { columns, data},
     useRowSelect,
     hooks => {
       hooks.visibleColumns.push(columns => [
-        // Let's make a column for selection
         {
           id: 'selection',
-          // The header can use the table's getToggleAllRowsSelectedProps method
-          // to render a checkbox
           Header: ({ getToggleAllRowsSelectedProps }) => (
             <div>
-              <IndeterminateCheckbox onChange={onCheck} {...getToggleAllRowsSelectedProps()} />
+              <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />
             </div>
           ),
-          // The cell can use the individual row's getToggleRowSelectedProps method
-          // to the render a checkbox
           Cell: ({ row }) => (
             <div>
-              <IndeterminateCheckbox 
-                onChange={onCheck}
-                value={row.isSelected ? row.original.id : 'null'}
-                {...row.getToggleRowSelectedProps()} 
-              />
+              {
+                <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
+              }
+              {
+                  /*
+                  <input
+                    type='checkbox'
+                    onChange={e => setCheckedValue({ id: e.target.value, checked: row.isSelected })}
+                    value={row.isSelected ? row.original.id : 'null'}
+                    {...row.getToggleRowSelectedProps()}
+                  /> 
+                  */
+              }
             </div>
           ),
         },
@@ -68,7 +65,16 @@ const Table = ({ columns, data, checkedHandler }) => {
       ])
     }
   )
-  console.log('row', rows)
+
+  useEffect(() => {
+    const callbackValue = Object.keys(selectedRowIds).map(v => ({
+      id: Number(v), checked: selectedRowIds[v]
+    }))[0]
+    const datee = isEmpty(selectedRowIds) ? initial : callbackValue
+    console.log(datee)
+    checkedHandler(datee)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedRowIds])
 
   // Render the UI for your table
   return (
@@ -77,20 +83,17 @@ const Table = ({ columns, data, checkedHandler }) => {
         <thead>
           {headerGroups.map(headerGroup => (
             <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map(column => (
-                <th {...column.getHeaderProps()}>{column.render('Header')}</th>
-              ))}
+              {headerGroup.headers.map(column => <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+              )}
             </tr>
           ))}
         </thead>
         <tbody {...getTableBodyProps()}>
-          {rows.slice(0, 10).map((row, i) => {
+          {rows.slice(0, 10).map(row => {
             prepareRow(row)
             return (
               <tr {...row.getRowProps()}>
-                {row.cells.map(cell => {
-                  return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                })}
+                {row.cells.map(cell => <td {...cell.getCellProps()}>{cell.render('Cell')}</td>)}
               </tr>
             )
           })}

@@ -3,7 +3,7 @@ import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
 import { connect } from 'react-redux'
 import { fetchGames } from '../actions'
-import Table from '../components/table'
+// import Table from '../components/table'
 import Modal from '../components/modal'
 import Searchbar from '../components/searchbar'
 import Form from '../components/form'
@@ -94,7 +94,7 @@ const MainPage = ({ fetchGames, loading, data }) => {
         {checked && button(text.edit, 'edit')}
         {checked && button(text.delete, 'delete')}
       </div>
-      <Table headerText={text.tableHead} bodyData={tableData} checkedHandler={checkedHandler} />
+      {/*<Table headerText={text.tableHead} bodyData={tableData} checkedHandler={checkedHandler} />*/}
       <ReactTable checkedHandler={checkedHandler} tableData={tableData} tableColumn={column} />
       <Modal showModal={modalIsOn} modalClosed={modalClosed}>
         <Form typeOfForm={typeOfForm} id={checkData.id} data={data.data} />
