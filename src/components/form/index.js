@@ -1,7 +1,8 @@
 import React, { useState, Fragment, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { string, func } from 'prop-types'
-import { addGame, deleteGame, editGame } from '../../actions'
+// import { addGame, deleteGame, editGame } from '../../actions'
+import { addGame, deleteGame, editGame } from '../../ducks'
 import { Label, Span } from './styled'
 
 const mapDispatchToProps = ({ addGame, deleteGame, editGame })
