@@ -1,5 +1,4 @@
 import React, { Fragment, useEffect, useState } from 'react'
-import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
 import { connect } from 'react-redux'
 // import { fetchGames } from '../actions'
@@ -76,8 +75,7 @@ const MainPage = ({ fetchGames, loading, data }) => {
   
   useEffect(() => {
     if (isEmpty(data)) fetchGames()
-    const fetchedData = get(data, "data", [])
-    const filteredData = lowerCaseFilter(fetchedData, searchValue)
+    const filteredData = lowerCaseFilter(data, searchValue)
     setTableData(filteredData)
   }, [data, fetchGames, searchValue])
 
@@ -87,7 +85,7 @@ const MainPage = ({ fetchGames, loading, data }) => {
 
   if (loading) return <div>{text.loading}</div>
 
-  const dataWithId = !isEmpty(data) && data.data.map((o, i) => ({ ...o, appId: i }))
+  const dataWithId = !isEmpty(data) && data.map((o, i) => ({ ...o, appId: i }))
 
   return (
     <Fragment>
