@@ -1,11 +1,15 @@
 import React, { useState, Fragment, useEffect } from 'react'
 import { connect } from 'react-redux'
-import { string, func } from 'prop-types'
+import { string, func, number } from 'prop-types'
 // import { addGame, deleteGame, editGame } from '../../actions'
-import { addGame, deleteGame, editGame } from '../../ducks'
+import { createGameRequest, deleteGameRequest, editGameRequest } from '../../ducks/saga'
 import { Label, Span } from './styled'
 
-const mapDispatchToProps = ({ addGame, deleteGame, editGame })
+const mapDispatchToProps = ({ 
+  addGame: createGameRequest, 
+  deleteGame: deleteGameRequest, 
+  editGame: editGameRequest 
+})
 
 const text = {
   game: 'Game',
@@ -74,6 +78,7 @@ const Form = ({ typeOfForm, addGame, deleteGame, editGame, id, data }) => {
       setScore(selectedGame.score)
       setYear(selectedGame.year)
       setAppId(selectedGame.id)
+      console.log('selectedGame', selectedGame)
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -126,7 +131,7 @@ const Form = ({ typeOfForm, addGame, deleteGame, editGame, id, data }) => {
 Form.propTypes = {
   typeOfForm: string,
   addGame: func,
-  id: string
+  id: number
 }
 
 Form.defaultProps = {

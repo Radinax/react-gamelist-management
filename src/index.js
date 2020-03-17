@@ -2,11 +2,12 @@ import React from "react";
 import { render } from "react-dom";
 import { Provider } from "react-redux";
 // import { configureStore } from "./store";
-import { store } from './ducks'
+// import { store } from './ducks'
+import { configureStore } from './ducks/saga'
 import App from "./App";
 import * as serviceWorker from './serviceWorker';
 
-// const store = configureStore()
+const store = configureStore()
 
 render(
   <Provider store={store}>

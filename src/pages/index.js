@@ -1,8 +1,9 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import isEmpty from 'lodash/isEmpty'
 import { connect } from 'react-redux'
+import get from 'lodash/get'
 // import { fetchGames } from '../actions'
-import { fetchGames } from '../ducks'
+import { fetchingGames } from '../ducks/saga'
 // import Table from '../components/table'
 import Modal from '../components/modal'
 import Searchbar from '../components/searchbar'
@@ -10,7 +11,8 @@ import Form from '../components/form'
 import ReactTable from '../components/reactTable'
 import { lowerCaseFilter } from '../utils/lowerCaseFilter'
 
-const mapDispatchToProps = ({ fetchGames })
+// const mapDispatchToProps = ({ fetchGames })
+const mapDispatchToProps = ({ fetchGames: fetchingGames })
 const mapStateToProps = state => ({
   data: state.data,
   loading: state.loading,
@@ -75,7 +77,8 @@ const MainPage = ({ fetchGames, loading, data }) => {
   
   useEffect(() => {
     if (isEmpty(data)) fetchGames()
-    const filteredData = lowerCaseFilter(data, searchValue)
+    const games = get(data, 'data') || []
+    const filteredData = lowerCaseFilter(games, searchValue)
     setTableData(filteredData)
   }, [data, fetchGames, searchValue])
 
@@ -85,7 +88,7 @@ const MainPage = ({ fetchGames, loading, data }) => {
 
   if (loading) return <div>{text.loading}</div>
 
-  const dataWithId = !isEmpty(data) && data.map((o, i) => ({ ...o, appId: i }))
+  const dataWithId = !isEmpty(data) && data.data.map((o, i) => ({ ...o, appId: i }))
 
   return (
     <Fragment>
