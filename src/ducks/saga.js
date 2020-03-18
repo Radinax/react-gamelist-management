@@ -1,89 +1,77 @@
-import axios from "axios"
 import { createStore, applyMiddleware, compose } from 'redux'
 import createSagaMiddleware from "redux-saga"
-import { takeLatest, call, put } from "redux-saga/effects";
+import { takeLatest, call, put } from "redux-saga/effects"
+import { addGame, deleteGame, editGame, fetchGames } from '../api'
 
 // Types as constants
-const FETCH_GAMES_LOADING = "FETCH_GAMES_LOADING"
+const FETCH_GAMES_REQUESTED = "FETCH_GAMES_REQUESTED"
 const FETCH_GAMES_SUCCESS = "FETCH_GAMES_SUCCESS"
 const FETCH_GAMES_ERROR = "FETCH_GAMES_ERROR"
 
-export const CREATE_GAME_LOADING = "CREATE_GAMES_LOADING"
-const CREATE_GAME_SUCCESS = "CREATE_GAMES_SUCCESS"
+const CREATE_GAME_REQUESTED = "CREATE_GAMES_REQUESTED"
 const CREATE_GAME_ERROR = "CREATE_GAMES_ERROR"
 
-export const EDIT_GAME_LOADING = "EDIT_GAMES_LOADING"
-const EDIT_GAME_SUCCESS = "EDIT_GAMES_SUCCESS"
+const EDIT_GAME_REQUESTED = "EDIT_GAMES_REQUESTED"
 const EDIT_GAME_ERROR = "EDIT_GAMES_ERROR"
 
-export const DELETE_GAME_LOADING = "DELETE_GAMES_LOADING"
-const DELETE_GAME_SUCCESS = "DELETE_GAMES_SUCCESS"
+const DELETE_GAME_REQUESTED = "DELETE_GAMES_REQUESTED"
 const DELETE_GAME_ERROR = "DELETE_GAMES_ERROR"
 
-// API
-export const addGame = (payload) => axios.post('http://localhost:3000/games', { ...payload })
-export const deleteGame = (payload) => axios.delete(`http://localhost:3000/games/${payload.id}`)
-export const editGame = (payload) => axios.put(`http://localhost:3000/games/${payload.id}`, { ...payload })
-export const fetchGames = () => axios.get('http://localhost:3000/games')
-
 // Actions
-export const fetchingGames = () => ({ type: FETCH_GAMES_LOADING })
+export const fetchingGames = () => ({ type: FETCH_GAMES_REQUESTED })
 export const fetchingGamesSuccess = games => ({ type: FETCH_GAMES_SUCCESS, data: games })
 export const fetchingGamesError = error => ({ type: FETCH_GAMES_ERROR, error })
 
-export const createGameRequest = (payload) => ({ type: CREATE_GAME_LOADING, payload })
-export const createGameSuccess = () => ({ type: CREATE_GAME_SUCCESS })
+export const createGameRequest = (payload) => ({ type: CREATE_GAME_REQUESTED, payload })
 export const createGameError = () => ({ type: CREATE_GAME_ERROR })
 
-export const editGameRequest = (payload) => ({ type: EDIT_GAME_LOADING, payload })
-export const editGameSuccess = () => ({ type: EDIT_GAME_SUCCESS })
+export const editGameRequest = (payload) => ({ type: EDIT_GAME_REQUESTED, payload })
 export const editGameError = () => ({ type: EDIT_GAME_ERROR })
 
-export const deleteGameRequest = (payload) => ({ type:DELETE_GAME_LOADING, payload })
-export const deleteGameSuccess = () => ({ type:DELETE_GAME_SUCCESS })
+export const deleteGameRequest = (payload) => ({ type:DELETE_GAME_REQUESTED, payload })
 export const deleteGameError = () => ({ type:DELETE_GAME_ERROR })
 
-// Sagas
+// Watcher Saga: Generator function watching for every action...
+// ...in response to that action, the watcher will call a worker saga
 export default function* watcherSaga() {
-  yield takeLatest(FETCH_GAMES_LOADING, fetchGamesSaga)
-  yield takeLatest(CREATE_GAME_LOADING, createGameSaga)
-  yield takeLatest(EDIT_GAME_LOADING, editGameSaga)
-  yield takeLatest(DELETE_GAME_LOADING, deleteGameSaga)
+  yield takeLatest(FETCH_GAMES_REQUESTED, fetchGamesSaga)
+  yield takeLatest(CREATE_GAME_REQUESTED, createGameSaga)
+  yield takeLatest(EDIT_GAME_REQUESTED, editGameSaga)
+  yield takeLatest(DELETE_GAME_REQUESTED, deleteGameSaga)
 }
 
+// Worker Sagas
+// Call an API that put the Action to its corresponding channel
 function* fetchGamesSaga() {
   try {
-    const payload = yield call(fetchGames);
-    yield put({ type: FETCH_GAMES_SUCCESS, data: payload });
+    const payload = yield call(fetchGames)
+    yield put(fetchingGamesSuccess(payload))
   } catch (error) {
-    yield put({ type: FETCH_GAMES_ERROR, error });
+    yield put(fetchingGamesError(error))
   }
 }
 
 function* createGameSaga({ payload }) {
   try {
-    const data = yield call(addGame(payload))
-    yield put({ type: CREATE_GAME_LOADING, payload: data });
+    yield call(addGame(payload))
   } catch (error) {
-    yield put({ type: CREATE_GAME_ERROR, error });
+    yield put(createGameError(error))
   }
 }
 
 function* editGameSaga({ payload }) {
   try {
-    const data = yield call(editGame(payload))
-    yield put({ type: EDIT_GAME_LOADING, payload: data });
+    yield call(editGame(payload))
   } catch (error) {
-    yield put({ type: EDIT_GAME_ERROR, error });
+    yield put(editGameError(error))
   }
 }
 
 function* deleteGameSaga({ payload }) {
   try {
-    const data = yield call(deleteGame(payload))
-    yield put({ type: DELETE_GAME_LOADING, payload: data });
+    yield call(deleteGame(payload))
   } catch (error) {
-    yield put({ type: DELETE_GAME_ERROR, error });
+    yield put(deleteGameError(error))
   }
 }
 
@@ -97,29 +85,30 @@ const initialState = {
 // Root Reducer
 const rootReducer = (state = initialState, action) => {
   switch (action.type) {
-    case FETCH_GAMES_LOADING: {
+    case FETCH_GAMES_REQUESTED:
+    case DELETE_GAME_REQUESTED:
+    case CREATE_GAME_REQUESTED:
+    case EDIT_GAME_REQUESTED:
       return {
         ...state,
         loading: true
       };
-    }
-    case FETCH_GAMES_SUCCESS: {
+    case FETCH_GAMES_SUCCESS:
       return {
         ...state,
         data: action.data,
         loading: false
       };
-    }
-    case FETCH_GAMES_ERROR: {
+    case FETCH_GAMES_ERROR:
+    case DELETE_GAME_ERROR:
+    case CREATE_GAME_ERROR:
+    case EDIT_GAME_ERROR:
       return {
         ...state,
         loading: false,
         error: action.error
       };
-    }
-    default: {
-      return state;
-    }
+    default: return state
   }
 }
 
