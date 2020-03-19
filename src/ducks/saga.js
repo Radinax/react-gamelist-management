@@ -86,9 +86,6 @@ const initialState = {
 const rootReducer = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_GAMES_REQUESTED:
-    case DELETE_GAME_REQUESTED:
-    case CREATE_GAME_REQUESTED:
-    case EDIT_GAME_REQUESTED:
       return {
         ...state,
         loading: true
@@ -100,9 +97,6 @@ const rootReducer = (state = initialState, action) => {
         loading: false
       };
     case FETCH_GAMES_ERROR:
-    case DELETE_GAME_ERROR:
-    case CREATE_GAME_ERROR:
-    case EDIT_GAME_ERROR:
       return {
         ...state,
         loading: false,

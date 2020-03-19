@@ -1,7 +1,7 @@
 import { createSlice, getDefaultMiddleware, configureStore } from '@reduxjs/toolkit'
 import axios from 'axios'
 
-// Actions
+// API
 export const addGame = (payload) => () => axios.post('http://localhost:3000/games', { ...payload })
 export const deleteGame = (payload) => () => axios.delete(`http://localhost:3000/games/${payload.id}`)
 export const editGame = (payload) => () => axios.put(`http://localhost:3000/games/${payload.id}`, { ...payload })
@@ -41,6 +41,8 @@ const slice = createSlice({
     }
   }
 })
+
+console.log(slice)
 
 // Destructuring the actions we're gonna use in the app
 export const { fetchingGames, fetchingGamesSuccess, fetchingGamesError } = slice.actions

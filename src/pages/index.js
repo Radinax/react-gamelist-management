@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import get from 'lodash/get'
 // import { fetchGames } from '../actions'
 import { fetchingGames } from '../ducks/saga'
+// import { fetchGames } from '../ducks'
 // import Table from '../components/table'
 import Modal from '../components/modal'
 import Searchbar from '../components/searchbar'
@@ -78,6 +79,7 @@ const MainPage = ({ fetchGames, loading, data }) => {
   useEffect(() => {
     if (isEmpty(data)) fetchGames()
     const games = get(data, 'data') || []
+    // const games = data || []
     const filteredData = lowerCaseFilter(games, searchValue)
     setTableData(filteredData)
   }, [data, fetchGames, searchValue])

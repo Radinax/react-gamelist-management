@@ -2,12 +2,13 @@ import React, { useState, Fragment, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { string, func, number } from 'prop-types'
 import { createGameRequest, deleteGameRequest, editGameRequest } from '../../ducks/saga'
+// import { addGame, deleteGame, editGame } from '../../ducks'
 import { Label, Span } from './styled'
 
 const mapDispatchToProps = ({ 
   addGame: createGameRequest, 
   deleteGame: deleteGameRequest, 
-  editGame: editGameRequest 
+  editGame: editGameRequest
 })
 
 const text = {
