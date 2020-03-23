@@ -2,7 +2,10 @@ import React, { Fragment, useEffect, useState } from 'react'
 import isEmpty from 'lodash/isEmpty'
 import { connect } from 'react-redux'
 import get from 'lodash/get'
+// import { fetchGames } from '../actions'
 import { fetchingGames } from '../ducks/saga'
+// import { fetchGames } from '../ducks'
+// import Table from '../components/table'
 import Modal from '../components/modal'
 import Searchbar from '../components/searchbar'
 import Form from '../components/form'
@@ -44,7 +47,7 @@ const column = [
   }
 ]
 
-const MainPage = ({ fetchGames, loading, data }) => {
+const Gamelist = ({ fetchGames, loading, data }) => {
   const [tableData, setTableData] = useState([])
   const [searchValue, setSearchValue] = useState('')
   const [modalIsOn, setModalIsOn] = useState(false)
@@ -109,4 +112,4 @@ const MainPage = ({ fetchGames, loading, data }) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(MainPage)
+)(Gamelist)
