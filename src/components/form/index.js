@@ -14,6 +14,7 @@ const mapDispatchToProps = ({
 const text = {
   game: 'Game',
   console: 'Console',
+  genre: 'Genre',
   score: 'score',
   year: 'Year',
   warning: 'Are you sure you want to erase this game from the list?'
@@ -31,6 +32,7 @@ const Input = ({ name, value, label, onChange }) => {
 const Form = ({ typeOfForm, addGame, deleteGame, editGame, id, data }) => {
   const [gameName, setGameName] = useState('')
   const [consoles, setConsoles] = useState('')
+  const [genre, setGenre] = useState('')
   const [score, setScore] = useState(0)
   const [year, setYear] = useState(0)
   const [appId, setAppId] = useState(null)
@@ -41,6 +43,7 @@ const Form = ({ typeOfForm, addGame, deleteGame, editGame, id, data }) => {
       addGame({
         title: gameName,
         console: consoles,
+        genre,
         score,
         year
       })
@@ -52,6 +55,7 @@ const Form = ({ typeOfForm, addGame, deleteGame, editGame, id, data }) => {
       editGame({
         title: gameName,
         console: consoles,
+        genre,
         score,
         year,
         id: appId
@@ -63,6 +67,7 @@ const Form = ({ typeOfForm, addGame, deleteGame, editGame, id, data }) => {
     <Fragment>
       <Input name='game' value={gameName} label={text.game} onChange={handleChange(setGameName)} />
       <Input name='console' value={consoles} label={text.console} onChange={handleChange(setConsoles)} />
+      <Input name='genre' value={genre} label={text.genre} onChange={handleChange(setGenre)} />
       <Input name='score' value={score} label={text.score} onChange={handleChange(setScore)} />
       <Input name='year' value={year} label={text.year} onChange={handleChange(setYear)} />
     </Fragment>
@@ -75,6 +80,7 @@ const Form = ({ typeOfForm, addGame, deleteGame, editGame, id, data }) => {
       const selectedGame = data.filter(o => o.appId === parseInt(id))[0]
       setGameName(selectedGame.title)
       setConsoles(selectedGame.console)
+      setGenre(selectedGame.genre)
       setScore(selectedGame.score)
       setYear(selectedGame.year)
       setAppId(selectedGame.id)
@@ -96,6 +102,12 @@ const Form = ({ typeOfForm, addGame, deleteGame, editGame, id, data }) => {
           value={consoles}
           label={text.console}
           onChange={handleChange(setConsoles)} 
+        />
+        <Input
+          name='genre'
+          value={genre}
+          label={text.genre}
+          onChange={handleChange(setGenre)} 
         />
         <Input
           name='score'

@@ -1,11 +1,12 @@
 import React, { Fragment } from 'react'
 import SearchBar from '../searchbar'
+import { Button } from './styles'
 
 const Toolbar = () => {
   return (
     <Fragment>    
       <SearchBar />
-      <button>ADD</button>
+      <Button>ADD</Button>
     </Fragment>
   )
 }

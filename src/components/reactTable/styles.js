@@ -1,11 +1,11 @@
 import styled from 'styled-components'
 
 export const TableContainer = styled.div`
-  padding: 1rem;
+  padding-top: 1rem;
 
   table {
     border-spacing: 0;
-    border: 1px solid black;
+    border: 1px solid white;
 
     tr {
       :last-child {

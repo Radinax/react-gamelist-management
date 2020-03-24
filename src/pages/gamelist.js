@@ -1,18 +1,20 @@
-import React, { Fragment, useEffect, useState } from 'react'
-import isEmpty from 'lodash/isEmpty'
+// Libraries
+import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
-import get from 'lodash/get'
-// import { fetchGames } from '../actions'
-import { fetchingGames } from '../ducks/saga'
-// import { fetchGames } from '../ducks'
-// import Table from '../components/table'
+// Components
 import Modal from '../components/modal'
 import Searchbar from '../components/searchbar'
 import Form from '../components/form'
 import ReactTable from '../components/reactTable'
+// Utilities
+import get from 'lodash/get'
+import isEmpty from 'lodash/isEmpty'
 import { lowerCaseFilter } from '../utils/lowerCaseFilter'
+// Actions
+import { fetchingGames } from '../ducks/saga'
+// Styles
+import { MainContainer, ToolbarContainer, Button, Page } from './styles'
 
-// const mapDispatchToProps = ({ fetchGames })
 const mapDispatchToProps = ({ fetchGames: fetchingGames })
 const mapStateToProps = state => ({
   data: state.data,
@@ -21,7 +23,7 @@ const mapStateToProps = state => ({
 })
 
 const text = {
-  tableHead: ['', 'title', 'console', 'score', 'year'],
+  tableHead: ['', 'title', 'console', 'genre', 'score', 'year'],
   loading: 'LOADING',
   add: 'Add',
   delete: 'Delete',
@@ -36,6 +38,10 @@ const column = [
   {
     Header: 'Console',
     accessor: 'console'
+  },
+  {
+    Header: 'Genre',
+    accessor: 'genre'
   },
   {
     Header: 'Score',
@@ -73,7 +79,7 @@ const Gamelist = ({ fetchGames, loading, data }) => {
   const typeOfForm = selectForm(type, checkData.checked)
 
   const button = (text, type) => (
-    <button onClick={() => onClick(modalIsOn, type)}>{text}</button>
+    <Button onClick={() => onClick(modalIsOn, type)}>{text}</Button>
   )
   
   useEffect(() => {
@@ -92,20 +98,33 @@ const Gamelist = ({ fetchGames, loading, data }) => {
 
   const dataWithId = !isEmpty(data) && data.data.map((o, i) => ({ ...o, appId: i }))
 
+  const Table = (
+    <ReactTable checkedHandler={checkedHandler} tableData={tableData} tableColumn={column} />
+  )
+
+  const Toolbar = (
+    <ToolbarContainer>
+      <Searchbar searchHandler={searchHandler} />
+      {typeOfForm === 'create' && button(text.add, type)}
+      {checked && button(text.edit, 'edit')}
+      {checked && button(text.delete, 'delete')}
+    </ToolbarContainer>
+  )
+
+  const FormModal = (
+    <Modal showModal={modalIsOn} modalClosed={modalClosed}>
+      <Form typeOfForm={typeOfForm} id={checkData.id} data={dataWithId} />
+    </Modal>
+  )
+
   return (
-    <Fragment>
-      <div>
-        <Searchbar searchHandler={searchHandler} />
-        {typeOfForm === 'create' && button(text.add, type)}
-        {checked && button(text.edit, 'edit')}
-        {checked && button(text.delete, 'delete')}
-      </div>
-      {/*<Table headerText={text.tableHead} bodyData={tableData} checkedHandler={checkedHandler} />*/}
-      <ReactTable checkedHandler={checkedHandler} tableData={tableData} tableColumn={column} />
-      <Modal showModal={modalIsOn} modalClosed={modalClosed}>
-        <Form typeOfForm={typeOfForm} id={checkData.id} data={dataWithId} />
-      </Modal>
-    </Fragment>
+    <Page>
+      <MainContainer>
+        {Toolbar}      
+        {Table}
+      </MainContainer>
+      {FormModal}
+    </Page>
   )
 }
 
