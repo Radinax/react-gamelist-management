@@ -7,15 +7,14 @@ import Searchbar from '../components/searchbar'
 import Form from '../components/form'
 import ReactTable from '../components/reactTable'
 // Utilities
-import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
 import { lowerCaseFilter } from '../utils/lowerCaseFilter'
 // Actions
-import { fetchingGames } from '../ducks/saga'
+import { fetchGames } from '../ducks/createAsyncThunk'
 // Styles
 import { MainContainer, ToolbarContainer, Button, Page } from './styles'
 
-const mapDispatchToProps = ({ fetchGames: fetchingGames })
+const mapDispatchToProps = ({ fetchGames })
 const mapStateToProps = state => ({
   data: state.data,
   loading: state.loading,
@@ -84,8 +83,7 @@ const Gamelist = ({ fetchGames, loading, data }) => {
   
   useEffect(() => {
     if (isEmpty(data)) fetchGames()
-    const games = get(data, 'data') || []
-    // const games = data || []
+    const games = data || []
     const filteredData = lowerCaseFilter(games, searchValue)
     setTableData(filteredData)
   }, [data, fetchGames, searchValue])
@@ -96,7 +94,7 @@ const Gamelist = ({ fetchGames, loading, data }) => {
 
   if (loading) return <div>{text.loading}</div>
 
-  const dataWithId = !isEmpty(data) && data.data.map((o, i) => ({ ...o, appId: i }))
+  const dataWithId = !isEmpty(data) && data.map((o, i) => ({ ...o, appId: i }))
 
   const Table = (
     <ReactTable checkedHandler={checkedHandler} tableData={tableData} tableColumn={column} />
