@@ -18,7 +18,7 @@ export const Page = styled.div`${tw`
 
 // Home
 export const HomePage = styled.div`${tw`
-  flex justify-center`}
+  flex justify-center flex-col`}
 `
 export const HomeContainer = styled.div`${tw`
   flex flex-col justify-center bg-white w-6/12`}
@@ -28,4 +28,9 @@ export const HomeTitle = styled.span`${tw`
 `
 export const HomeIntro = styled.p`${tw`
   font-sans text-xl p-12 font-light`}
+`
+
+// Card
+export const CardContainer = styled.div`${tw`
+  flex justify-center flex-wrap`}
 `

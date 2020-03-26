@@ -8,7 +8,7 @@ import tw from 'tailwind.macro';
 import './index.css'
 
 const Container = styled.div`${tw`
-  bg-gray-400 font-sans leading-normal tracking-normal h-screen
+  bg-gray-400 font-sans leading-normal tracking-normal min-h-screen
 `}`
 
 function App() {
