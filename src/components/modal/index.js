@@ -16,7 +16,6 @@ const customStyles = {
   }
 };
 
-
 const Modal = ({ showModal, modalClosed, children }) => {
   const [openModal, setOpenModal] = useState(false)
   
@@ -30,7 +29,7 @@ const Modal = ({ showModal, modalClosed, children }) => {
   return (
     <ReactModal
       isOpen={openModal}
-      shouldCloseOnEsc={true}
+      shouldCloseOnEsc
       ariaHideApp={false}
       style={customStyles}
     >
