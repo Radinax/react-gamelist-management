@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { bool, func } from 'prop-types'
 import ReactModal from 'react-modal'
+import './index.css'
 
 const customStyles = {
   content : {
@@ -12,7 +13,9 @@ const customStyles = {
     transform: 'translate(-50%, -50%)',
     display: 'flex',
     flexDirection: 'column',
-    background: '#cbd5e0'
+    maxHeight: '80%',
+    justifyContent: 'center',
+    width: '80%'
   }
 };
 
@@ -32,9 +35,9 @@ const Modal = ({ showModal, modalClosed, children }) => {
       shouldCloseOnEsc
       ariaHideApp={false}
       style={customStyles}
+      onRequestClose={closeModal}
     >
       {children}
-      <button style={{ width: 'fit-content' }} onClick={() => closeModal()}>CLOSE MODAL</button>
     </ReactModal>
   )
 }

@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import { 
   Container, Img, Description,
-  Title
+  ModalContainer, Title, ModalDescription
 } from './styles'
 
 const Card = ({ img, description, type, summary, graphics, gameplay, conclusion, music, onClick }) => {
@@ -13,26 +13,30 @@ const Card = ({ img, description, type, summary, graphics, gameplay, conclusion,
     { title: 'conclusion', text: conclusion }
   ]
   const HomeCard = (
-    <Fragment>
+    <Container className='transition duration-200' onClick={() => onClick()}>
       <Img src={img} />
       <Description>{description}</Description>
-    </Fragment>
+    </Container>
   )
   const ModalCard = () =>{
     const card = cardTitles.map(v => (
       <Fragment key={v.title}>
         <Title>{v.title}</Title>
-        <Description>{v.text}</Description>
+        <ModalDescription>{v.text}</ModalDescription>
       </Fragment>
     ))
-    return card
+    return (
+      <ModalContainer>
+        {card}
+      </ModalContainer>
+    )
   }
 
   return (
-    <Container className='transition duration-200' onClick={() => onClick()}>
+    <Fragment>
       {type === 'home' && HomeCard}
       {type === 'modal' && ModalCard()}
-    </Container>
+    </Fragment>
   )
 }
 

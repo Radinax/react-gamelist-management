@@ -32,5 +32,5 @@ export const HomeIntro = styled.p`${tw`
 
 // Card
 export const CardContainer = styled.div`${tw`
-  flex justify-center flex-wrap`}
+  flex justify-center flex-wrap flex-col sm:flex-row`}
 `

@@ -1,0 +1,5 @@
+@media (max-width: 500px) {
+  .ReactModal__Content {
+    width: 100%;
+  }
+}
