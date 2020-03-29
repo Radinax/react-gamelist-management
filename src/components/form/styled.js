@@ -1,11 +1,12 @@
 import styled from 'styled-components'
+import tw from 'tailwind.macro'
 
-export const Label = styled.label`
-  display: flex;
-  justify-content: space-between;
-  padding: 8px 0px;
+export const FormContainer = styled.div`${tw`
+  flex justify-center bg-gray-500`}
 `
-export const Span = styled.span`
-  padding-right: 8px;
+export const Label = styled.label`${tw`
+  flex justify-between py-1 px-0`}
 `
-
+export const Span = styled.span`${tw`
+  pr-1`}
+`

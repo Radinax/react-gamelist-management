@@ -11,10 +11,8 @@ const customStyles = {
     bottom: 'auto',
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)',
-    display: 'flex',
-    flexDirection: 'column',
+    display: 'block',
     maxHeight: '80%',
-    justifyContent: 'center',
     width: '80%'
   }
 };

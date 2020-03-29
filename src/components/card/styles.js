@@ -14,8 +14,7 @@ export const Description = styled.p`${tw`
 `
 // Modal
 export const ModalContainer = styled.div`${tw`
-  flex flex-col justify-center w-8/12 ml-auto mr-auto sm:mt-40`}
-  margin-top 856px;
+  block ml-auto mr-auto rounded-lg`}
 `
 export const Title = styled.span`${tw`
   text-center`}
@@ -23,5 +22,5 @@ export const Title = styled.span`${tw`
   width: fit-content;
 `
 export const ModalDescription = styled.p`${tw`
-  flex items-center flex-wrap p-4`}
+  flex items-center flex-wrap pt-4 pb-4`}
 `
