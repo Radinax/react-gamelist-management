@@ -1,14 +1,14 @@
 import React, { useState, Fragment, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { string, func, number } from 'prop-types'
-import { createGameRequest, deleteGameRequest, editGameRequest } from '../../ducks/saga'
-// import { addGame, deleteGame, editGame } from '../../ducks'
+// import { createGameRequest, deleteGameRequest, editGameRequest } from '../../ducks/saga'
+import { addGame, deleteGame, editGame } from '../../ducks/createAsyncThunk'
 import { Label, Span, FormContainer } from './styled'
 
 const mapDispatchToProps = ({ 
-  addGame: createGameRequest, 
-  deleteGame: deleteGameRequest, 
-  editGame: editGameRequest
+  addGame, 
+  deleteGame,
+  editGame
 })
 
 const text = {
@@ -21,8 +21,10 @@ const text = {
   description: 'Description',
   summary: 'Summary',
   graphics: 'Graphics',
+  gameplay: 'Gameplay',
   music: 'Music',
-  conclusion: 'Conclusion'
+  conclusion: 'Conclusion',
+  img: 'Img'
 }
 
 const listOfConsoles = ['PC', 'PSX', 'PS2', 'PS3', 'PS4', 'SNES', 'N64', 'GameCube', 'Wii', 'Wii U', 'Switch', 'GBA', 'DS', '3DS', 'PSP', 'Vita']
@@ -79,6 +81,7 @@ const Form = ({ typeOfForm, addGame, deleteGame, editGame, id, data }) => {
   const [summary, setSummary] = useState('')
   const [graphics, setGraphics] = useState('')
   const [music, setMusic] = useState('')
+  const [img, setImg] = useState('')
   const [gameplay, setGameplay] = useState('')
   const [conclusion, setConclusion] = useState('')
   const [appId, setAppId] = useState(null)
@@ -86,7 +89,7 @@ const Form = ({ typeOfForm, addGame, deleteGame, editGame, id, data }) => {
   const handleChange = setter => event => setter(event.target.value)
   const handleSubmit = () => {
     if (typeOfForm === 'create') {
-      addGame({
+      const info = {
         title: gameName,
         console: consoles,
         genre,
@@ -96,9 +99,12 @@ const Form = ({ typeOfForm, addGame, deleteGame, editGame, id, data }) => {
         summary,
         graphics,
         music,
+        img,
         gameplay,
         conclusion
-      })
+      }
+      console.log('info', info)
+      addGame(info)
     } else if (typeOfForm === 'delete') {
       deleteGame({
         id: appId
@@ -135,6 +141,7 @@ const Form = ({ typeOfForm, addGame, deleteGame, editGame, id, data }) => {
       <Input name='graphics' type="textarea" value={graphics} label={text.graphics} onChange={handleChange(setGraphics)} />
       <Input name='music' type="textarea" value={music} label={text.music} onChange={handleChange(setMusic)} />
       <Input name='gameplay' type="textarea" value={gameplay} label={text.gameplay} onChange={handleChange(setGameplay)} />
+      <Input name='img' type="textarea" value={img} label={text.img} onChange={handleChange(setImg)} />
       <Input name='conclusion' type="textarea" value={conclusion} label={text.conclusion} onChange={handleChange(setConclusion)} />
       
     </Fragment>
@@ -155,6 +162,7 @@ const Form = ({ typeOfForm, addGame, deleteGame, editGame, id, data }) => {
       setGraphics(selectedGame.graphics)
       setMusic(selectedGame.music)
       setGameplay(selectedGame.gameplay)
+      setImg(selectedGame.img)
       setConclusion(selectedGame.conclusion)
       setAppId(selectedGame.id)
     }

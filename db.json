@@ -74,6 +74,21 @@
       "gameplay": "Classic Tales, go from town to town resolving misteries and moving on with the plot. The battle system is repetitive button smashing, nothing much to say honestly.",
       "conclusion": "Its a great game, the story is a typical anime story with great character development, sadly the combat holds it back for me",
       "id": 12
+    },
+    {
+      "title": "Kingdom Hearts",
+      "console": "PS2",
+      "genre": "ARPG",
+      "score": "8",
+      "year": "2000",
+      "description": "Sora, Donald and Goofy goes in a journey to rescue King Mickey and Sora's friends, Rikku and Kairi.",
+      "summary": "adad",
+      "graphics": "aadad",
+      "music": "adad",
+      "img": "https://fencingwithink.files.wordpress.com/2013/07/kh10.jpg",
+      "gameplay": "adad",
+      "conclusion": "Great game",
+      "id": 13
     }
   ]
 }

@@ -17,7 +17,7 @@ export const ModalContainer = styled.div`${tw`
   block ml-auto mr-auto rounded-lg`}
 `
 export const Title = styled.span`${tw`
-  text-center`}
+  text-center font-bold`}
   text-transform: capitalize;
   width: fit-content;
 `
