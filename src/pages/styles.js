@@ -23,8 +23,8 @@ export const HomePage = styled.div`${tw`
 export const HomeContainer = styled.div`${tw`
   flex flex-col justify-center bg-white w-6/12`}
 `
-export const HomeTitle = styled.span`${tw`
-  text-4xl text-center`}
+export const HomeTitle = styled.h1`${tw`
+  text-4xl text-center p-10 text-white`}
 `
 export const HomeIntro = styled.p`${tw`
   font-sans text-xl p-12 font-light`}

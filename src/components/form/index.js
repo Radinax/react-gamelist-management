@@ -47,15 +47,29 @@ const Input = ({ name, value, label, onChange, type }) => {
   }
   return (
     <Label>
-      <Span>{`${label}: `}</Span>      
-      <input
-        type={inputType(type)}
-        minLength={minNumber(type)}
-        maxLength={maxNumber(type)}
-        name={name} value={value}
-        onChange={onChange}
-        required
-      />
+      <Span>{`${label}: `}</Span>
+      {inputType(type) === 'textarea' 
+      ? (
+        <textarea
+          name={name}
+          value={value}
+          onChange={onChange}
+          required
+          style={{ width: '174px' }}
+        />
+      ) 
+      : (
+        <input
+          type={inputType(type)}
+          minLength={minNumber(type)}
+          maxLength={maxNumber(type)}
+          name={name}
+          value={value}
+          onChange={onChange}
+          required
+        />
+      )}    
+      
     </Label>
   )
 }
@@ -116,6 +130,13 @@ const Form = ({ typeOfForm, addGame, deleteGame, editGame, id, data }) => {
         genre,
         score,
         year,
+        description,
+        summary,
+        graphics,
+        music,
+        img,
+        gameplay,
+        conclusion,
         id: appId
       })
     }
@@ -204,36 +225,43 @@ const Form = ({ typeOfForm, addGame, deleteGame, editGame, id, data }) => {
         />
         <Input
           name='description'
+          type='textarea'
           value={description}
           label={text.description}
           onChange={handleChange(setDescription)} 
         />
         <Input
           name='summary'
+          type='textarea'
           value={summary}
           label={text.summary}
           onChange={handleChange(setSummary)} 
         />
         <Input
           name='graphics'
+          type='textarea'
           value={graphics}
           label={text.graphics}
           onChange={handleChange(setGraphics)} 
         />
         <Input
           name='gameplay'
+          type='textarea'
           value={gameplay}
           label={text.gameplay}
           onChange={handleChange(setGameplay)} 
         />
         <Input
           name='music'
+          type='textarea'
           value={music}
           label={text.music}
           onChange={handleChange(setMusic)} 
         />
+        <Input name='img' value={img} label={text.img} onChange={handleChange(setImg)} />
         <Input
           name='conclusion'
+          type='textarea'
           value={conclusion}
           label={text.conclusion}
           onChange={handleChange(setConclusion)} 
