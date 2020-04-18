@@ -1,6 +1,6 @@
 // Libraries
 import React, { useEffect, useState } from 'react'
-import { connect } from 'react-redux'
+import { useQuery } from '@apollo/react-hooks'
 // Components
 import Modal from '../components/modal'
 import Searchbar from '../components/searchbar'
@@ -9,56 +9,32 @@ import ReactTable from '../components/reactTable'
 // Utilities
 import isEmpty from 'lodash/isEmpty'
 import { lowerCaseFilter } from '../utils/lowerCaseFilter'
-// Actions
-import { fetchGames } from '../ducks/createAsyncThunk'
+import { text, column } from './utils'
 // Styles
 import { MainContainer, ToolbarContainer, Button, Page } from './styles'
+import { TABLE_DATA } from '../queries/getTableData'
 
-const mapDispatchToProps = ({ fetchGames })
-const mapStateToProps = state => ({
-  data: state.data,
-  loading: state.loading,
-  error: state.error,
-})
-
-const text = {
-  tableHead: ['', 'title', 'console', 'genre', 'score', 'year'],
-  loading: 'LOADING',
-  add: 'Add',
-  delete: 'Delete',
-  edit: 'Edit'
-}
-
-const column = [
-  {
-    Header: 'Title',
-    accessor: 'title'
-  },
-  {
-    Header: 'Console',
-    accessor: 'console'
-  },
-  {
-    Header: 'Genre',
-    accessor: 'genre'
-  },
-  {
-    Header: 'Score',
-    accessor: 'score'
-  },
-  {
-    Header: 'Year',
-    accessor: 'year'
-  }
-]
-
-const Gamelist = ({ fetchGames, loading, data }) => {
+const Gamelist = () => {
   const [tableData, setTableData] = useState([])
   const [searchValue, setSearchValue] = useState('')
   const [modalIsOn, setModalIsOn] = useState(false)
   const [checkData, setCheckData] = useState({})
   const [type, setType] = useState('create')
   const { checked } = checkData
+  const { loading, error, data } = useQuery(TABLE_DATA)
+  const dataWithId = tableData.map((o, i) => ({ ...o, appId: i }))
+
+  useEffect(() => {
+    const { allGames } = data || []
+    if(!isEmpty(allGames)) setTableData(lowerCaseFilter(allGames, searchValue))
+  }, [data, searchValue])
+
+  useEffect(() => {
+    if (checked === false) setType('create')
+  }, [checked])
+  
+  if (loading) return <div>{text.loading}</div>
+  if (error) return <div>{text.error}</div>
 
   const searchHandler = (value) => setSearchValue(value)
   const checkedHandler = (value) => setCheckData(value)
@@ -80,21 +56,6 @@ const Gamelist = ({ fetchGames, loading, data }) => {
   const button = (text, type) => (
     <Button onClick={() => onClick(modalIsOn, type)}>{text}</Button>
   )
-  
-  useEffect(() => {
-    if (isEmpty(data)) fetchGames()
-    const games = data || []
-    const filteredData = lowerCaseFilter(games, searchValue)
-    setTableData(filteredData)
-  }, [data, fetchGames, searchValue])
-
-  useEffect(() => {
-    if (checked === false) setType('create')
-  }, [checked, setType])
-
-  if (loading) return <div>{text.loading}</div>
-
-  const dataWithId = !isEmpty(data) && data.map((o, i) => ({ ...o, appId: i }))
 
   const Table = (
     <ReactTable checkedHandler={checkedHandler} tableData={tableData} tableColumn={column} />
@@ -126,7 +87,4 @@ const Gamelist = ({ fetchGames, loading, data }) => {
   )
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Gamelist)
+export default Gamelist

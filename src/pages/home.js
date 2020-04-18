@@ -1,35 +1,26 @@
-import React, { useState, useEffect } from 'react'
-import { connect } from 'react-redux'
-import isEmpty from 'lodash/isEmpty'
+import React, { useState } from 'react'
+import { useQuery } from '@apollo/react-hooks'
 import { CardContainer, HomeTitle, HomePage } from './styles'
 import Card from '../components/card'
 import Modal from '../components/modal'
-// Actions
-import { fetchGames } from '../ducks/createAsyncThunk'
-
-const mapDispatchToProps = ({ fetchGames })
-const mapStateToProps = state => ({
-  data: state.data,
-  loading: state.loading
-})
+import { GET_GAMES } from '../queries/getGames'
 
 const text = {
   title: 'Welcome to my JRPG Journal!',
   intro: "In this website you'll find my favorite games, deep reviews, order of my games from best to worst, beatiful cards on click which shows the launch trailer, game opening and the scores I give it. Welcome aboard my JRPG journal!",
-  loading: 'LOADING'
+  loading: 'LOADING',
+  error: 'There was an error'
 }
 
-const Home = ({ fetchGames, loading, data }) => {
+const Home = () => {
   const [modalIsOn, setModalIsOn] = useState(false)
   const [cardModalId, setCardModalId] = useState(0)
-  const [gamesData, setGamesData] = useState([])
-  const { summary, graphics, music, gameplay, conclusion } = data[cardModalId] || []
+  const { loading, error, data } = useQuery(GET_GAMES)
 
-  useEffect(() => {
-    if (isEmpty(data)) fetchGames()
-    const games = data || []
-    setGamesData(games)
-  }, [data, fetchGames])
+  if (loading) return <div>{text.loading}</div>
+  if (error) return <div>{text.error}</div>
+  
+  const { summary, graphics, music, gameplay, conclusion } = data.allGames[cardModalId] || []
 
   const onClick = (bool, id) => {
     setModalIsOn(!bool)
@@ -40,7 +31,7 @@ const Home = ({ fetchGames, loading, data }) => {
   const title = <HomeTitle>{text.title}</HomeTitle>
 
   const games = () => {
-    const gameCards = gamesData.map((info, index) => (
+    const gameCards = data.allGames.map((info, index) => (
       <Card
         onClick={() => onClick(modalIsOn, index)}
         key={info.title}
@@ -70,8 +61,6 @@ const Home = ({ fetchGames, loading, data }) => {
     </Modal>
   )
 
-  if (loading) return <div>{text.loading}</div>
-
   return (
     <HomePage>
       {title}
@@ -81,8 +70,4 @@ const Home = ({ fetchGames, loading, data }) => {
   )
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Home)
-
+export default Home

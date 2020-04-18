@@ -1,18 +1,21 @@
 import React from "react";
 import { render } from "react-dom";
-import { Provider } from "react-redux";
-// import { configureStore } from "./store";
-import { store } from './ducks/createAsyncThunk'
-// import { configureStore } from './ducks/saga'
+import ApolloClient from 'apollo-boost';
+import { ApolloProvider } from 'react-apollo';
+import { InMemoryCache } from 'apollo-cache-inmemory'
 import App from "./App";
 import * as serviceWorker from './serviceWorker';
 
-// const store = configureStore()
+const client = new ApolloClient({
+  cache: new InMemoryCache(),
+  uri: 'http://localhost:5000/'
+});
+
 
 render(
-  <Provider store={store}>
+  <ApolloProvider client={client}>
     <App />
-  </Provider>,
+  </ApolloProvider>,
   document.getElementById("root")
 );
 
